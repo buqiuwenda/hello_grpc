@@ -16,11 +16,16 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+	pd "gitlab.km.com/huanzhongxi/hello_grpc/api/protobuf-spec/example"
+	"gitlab.km.com/huanzhongxi/hello_grpc/interal/service"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+	"log"
+	"net"
 )
 
+var grpcPort = ":8080"
 // grpcCmd represents the grpc command
 var grpcCmd = &cobra.Command{
 	Use:   "grpc",
@@ -32,7 +37,17 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("grpc called")
+		lis, err :=net.Listen("tcp", grpcPort)
+		if err !=nil{
+			log.Fatalf("failed to listen: %v", err)
+		}
+
+		s :=grpc.NewServer()
+		pd.RegisterExampleServer(s, service.NewServer())
+		reflection.Register(s)
+		if err := s.Serve(lis); err != nil {
+			log.Fatalf("failed to serve: %v", err)
+		}
 	},
 }
 
