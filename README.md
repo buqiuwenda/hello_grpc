@@ -17,5 +17,11 @@ go-grpc
    
     `go get -u -v github.com/spf13/cobra/cobra`
     
+   ### 安装grpcui
+   `go get github.com/fullstorydev/grpcui/...
+    go install github.com/fullstorydev/grpcui/cmd/grpcui` 
+    
+    `grpcui -plaintext localhost:12345`
+    
 ### 生成grpc文件
   命令：`cobra add grpc`    
